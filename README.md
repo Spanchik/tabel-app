@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# Табель S.V Group
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-система для управління змінами продавців у мережі магазинів «Лепрекон».
 
-Currently, two official plugins are available:
+## Стек
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React + TypeScript**
+- **Vite** як збирач
+- **Supabase (PostgreSQL)** – база даних, API, авторизація
+- **React Router** – маршрути
+- **CSS** – кастомна верстка без важких UI-фреймворків
 
-## React Compiler
+## Основний функціонал (на зараз)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Табель по ТТ (по округах)
+- Відображення змін по торгових точках за місяць
+- Вибір співробітника та типу зміни по кліку на комірку
+- Підміни між округами (співробітники з інших округів)
+- Автоматичне визначення підміни та підсвічування:
+  - свій округ – зелений
+  - підміна – помаранчевий
+- Блокування дат до відкриття ТТ та після закриття
 
-## Expanding the ESLint configuration
+### Сводка по співробітниках
+- Показує, де працював співробітник щодня (з назвами ТТ)
+- Підміни відображаються помаранчевим
+- Перевірка конфліктів:
+  - якщо співробітник стоїть на 2+ ТТ в один день
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Персонал
+- Список співробітників
+- Редагування (ПІБ, округ, статус)
+- Додавання нового співробітника
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Торгові точки
+- Список ТТ з прив’язкою до округу
+- Додавання / редагування ТТ
+- Дата відкриття `opened_at`
+- Дата закриття `closed_at`
+- Статус активності `is_active`
+- Логіка:
+  - до `opened_at` ТТ не відображається в табелі
+  - після `closed_at` – також не відображається
+  - в місяці відкриття/закриття – блокуються відповідні дні
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Запуск локально
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```bash
+# клонувати репозиторій
+git clone https://github.com/USERNAME/tabel-app.git
+cd tabel-app/frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# встановити залежності
+npm install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# запустити в режимі розробки
+npm run dev
